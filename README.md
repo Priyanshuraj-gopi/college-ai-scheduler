@@ -146,12 +146,25 @@ A browser window will open. Authorize your personal account once. The token will
 
 ---
 
-## ☁️ Google Apps Script (Cloud Layer)
+## 📅 Registro ERP Timetable & Live Calendar Sync
 
-The cloud layer (`Code.js`) runs directly inside Google's cloud infrastructure via Apps Script:
-1. Cloned and deployed via `@google/clasp`.
-2. Automatically synchronizes timetable sessions from your college student portal (Registro) to Google Calendar with duplicate session collision protection.
-3. Automatically queries all emails labeled `AI-GEMINI-READY`, feeds them to Gemini, creates calendar events/tasks, and updates labels to `AI-PROCESSED`.
+The cloud layer in `Code.js` includes a complete autonomous integration with the college **Registro ERP** portal:
+
+- **Autonomous Token Lifecycle**: Stores encrypted credentials in Apps Script `ScriptProperties` and automatically tests and refreshes the 30-day API access token when near expiration.
+- **Duplicate Session Reconciliation**: Uses a deterministic composite hashing algorithm (`Date|Course|Room|Slot`) to prevent duplicate calendar events when classroom locations or faculty slots are rescheduled.
+- **MAP & Workshop Support**: Handles multi-group and shared workshop collisions (e.g., MAP workshops) so parallel course tracks never overwrite each other.
+- **Live Google Calendar Mirror**: Fetches term timetable records directly from the Registro endpoint and reflects real-time schedule changes into your primary Google Calendar.
+
+---
+
+## ☁️ Google Apps Script Cloud Engine (`Code.js`)
+
+Deployed seamlessly via `@google/clasp`, the cloud automation engine runs 24/7 on Google's infrastructure:
+
+1. **Dual-Trigger Execution**: Synchronized on 30-minute triggers to match the local Windows Task Scheduler runner.
+2. **Registro Timetable Sync (`syncRegistroToCalendarLive`)**: Keeps classroom sessions, room numbers, and timings updated without manual intervention.
+3. **Gemini Email Orchestrator**: Queries messages labeled `AI-GEMINI-READY` (triage passed by Ollama), runs deep semantic extraction via Gemini 1.5, generates Google Calendar events with alerts, and logs actionable deadlines into Google Tasks.
+4. **Label Finalization**: Removes `AI-GEMINI-READY` and adds `AI-PROCESSED` once calendar entries are verified.
 
 ---
 
